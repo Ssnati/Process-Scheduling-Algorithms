@@ -42,7 +42,11 @@ def sjf_expropiativo(procesos):
             cola.append(proceso_actual)
 
         if cola:
-            proceso_actual = min(cola, key=lambda p: p['ticks_cpu'] - tiempos_finalizados[p['nombre']])
+            # Elegir el proceso con menor ticks_cpu - tiempo_finalizado
+            proceso_actual = min(cola, key=lambda p: (
+                p['ticks_cpu'] - tiempos_finalizados[p['nombre']],
+                1 if p == proceso_actual else 0  # Priorizar proceso actual si es igual
+            ))
             cola.remove(proceso_actual)
         else:
             tiempo_actual += 1
