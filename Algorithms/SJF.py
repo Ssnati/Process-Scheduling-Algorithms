@@ -72,7 +72,7 @@ def sjf_expropiativo(procesos):
             ciclo_final = tiempo_actual
             tiempos_retorno[proceso_actual['nombre']] = ciclo_final - proceso_actual['tiempo_llegada']
             tiempos_espera[proceso_actual['nombre']] = tiempos_retorno[proceso_actual['nombre']] - procesos[procesos.index(proceso_actual)]['ticks_cpu']
-            print(f"Proceso {proceso_actual['nombre']} terminado - Ciclo final: {ciclo_final}")
+            print(f"Proceso {proceso_actual['nombre']} - Ciclo inicial: {proceso_actual['tiempo_llegada']}, Ciclo final: {ciclo_final}")
             procesos.remove(proceso_actual)
 
         # Actualizar tiempos de espera de los demás procesos
