@@ -1,9 +1,9 @@
 from Prioridad import prioridad
 from FCFS import fcfs
-from SJF import sjf
-from SJF import sjf_expropiativo
+from SJF import sjf_no_expropiativo, sjf_expropiativo
 from Round_Robin import round_robin
 from Tiempos_Promedios import calcular_promedios
+
 
 # Función para ingresar los procesos
 def ingresar_procesos():
@@ -39,6 +39,7 @@ def seleccionar_algoritmo():
     opcion = int(input("Ingrese el número de la opción: "))  # RF3
     return opcion
 
+
 # Función principal
 def main():
     procesos = ingresar_procesos()
@@ -47,7 +48,7 @@ def main():
         if algoritmo == 1:
             tiempos_espera, tiempos_retorno = fcfs(procesos)
         elif algoritmo == 2:
-            tiempos_espera, tiempos_retorno = sjf(procesos)
+            tiempos_espera, tiempos_retorno = sjf_no_expropiativo(procesos)
         elif algoritmo == 3:
             tiempos_espera, tiempos_retorno = sjf_expropiativo(procesos)
         elif algoritmo == 4:
@@ -58,6 +59,7 @@ def main():
             print("Opción inválida")
             return
         calcular_promedios(tiempos_espera, tiempos_retorno)
+
         algoritmo = seleccionar_algoritmo()
 
 

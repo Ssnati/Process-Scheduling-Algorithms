@@ -1,25 +1,45 @@
-# SJF - Shortest Job First
-def sjf(procesos):
-    procesos_ordenados = sorted(procesos, key=lambda p: (p['tiempo_llegada'], p['ticks_cpu']))
+import math
+
+
+# Shortest Job First (SJF) no expropiativo
+def sjf_no_expropiativo(procesos):
     tiempo_actual = 0
-    tiempos_espera = []
-    tiempos_retorno = []
+    tiempos_espera = {p['nombre']: 0 for p in procesos}
+    tiempos_retorno = {p['nombre']: 0 for p in procesos}
 
-    print("\nSimulación de SJF:")
-    for proceso in procesos_ordenados:
-        if tiempo_actual < proceso['tiempo_llegada']:
-            tiempo_actual = proceso['tiempo_llegada']
+    # Ordenar los procesos por tiempo de llegada
+    procesos.sort(key=lambda x: x['tiempo_llegada'])
 
+    print("\nSimulación de SJF No Expropiativo:")
+    while procesos:
+        # Filtrar los procesos que han llegado
+        lista_disponible = [p for p in procesos if p['tiempo_llegada'] <= tiempo_actual]
+
+        if not lista_disponible:
+            # Si no hay procesos disponibles, avanzar el tiempo
+            tiempo_actual = procesos[0]['tiempo_llegada']
+            continue
+
+        # Escoger el proceso con el menor tiempo de ejecución
+        proceso_actual = min(lista_disponible, key=lambda x: x['ticks_cpu'])
+
+        # Calcular tiempos
         ciclo_inicial = tiempo_actual
-        ciclo_final = tiempo_actual + proceso['ticks_cpu']
-        tiempo_actual = ciclo_final
+        tiempo_actual += proceso_actual['ticks_cpu']
+        ciclo_final = tiempo_actual
 
-        tiempos_espera.append(ciclo_inicial - proceso['tiempo_llegada'])
-        tiempos_retorno.append(ciclo_final - proceso['tiempo_llegada'])
+        # Guardar tiempos de retorno y espera
+        tiempos_retorno[proceso_actual['nombre']] = ciclo_final - proceso_actual['tiempo_llegada']
+        tiempos_espera[proceso_actual['nombre']] = tiempos_retorno[proceso_actual['nombre']] - proceso_actual[
+            'ticks_cpu']
 
-        print(f"Proceso {proceso['nombre']} - Ciclo inicial: {ciclo_inicial}, Ciclo final: {ciclo_final}")
+        # Imprimir el proceso y sus ciclos
+        print(f"Proceso {proceso_actual['nombre']} - Ciclo inicial: {ciclo_inicial}, Ciclo final: {ciclo_final}")
 
-    return tiempos_espera, tiempos_retorno
+        # Eliminar el proceso de la lista
+        procesos.remove(proceso_actual)
+
+    return list(tiempos_espera.values()), list(tiempos_retorno.values())
 
 
 def sjf_expropiativo(procesos):
