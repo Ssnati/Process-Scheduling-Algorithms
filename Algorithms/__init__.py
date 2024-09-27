@@ -22,7 +22,7 @@ def seleccionar_algoritmo():
 # Función principal
 def cargar_procesos():
     procesos = []
-    with open("process.csv", "r") as csvfile:
+    with open("../process.csv", "r") as csvfile:
         lector = csv.reader(csvfile)
 
         # Omitir la primera fila que contiene los encabezados
